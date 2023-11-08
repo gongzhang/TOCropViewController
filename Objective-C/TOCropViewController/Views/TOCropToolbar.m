@@ -301,10 +301,12 @@
             CGPoint origin = horizontally ? CGPointMake(diffOffset, sameOffset) : CGPointMake(sameOffset, diffOffset);
             if (horizontally) {
                 origin.x += CGRectGetMinX(containerRect);
+#if !TARGET_OS_VISION
                 if (@available(iOS 13.0, *)) {
                     UIImage *image = button.imageView.image;
                     button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, image.baselineOffsetFromBottom, 0);
                 }
+#endif
             } else {
                 origin.y += CGRectGetMinY(containerRect);
             }

@@ -462,9 +462,11 @@ open class CropViewController: UIViewController, TOCropViewControllerDelegate {
         return false
     }
     
+    #if !os(visionOS)
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return toCropViewController.preferredStatusBarStyle
     }
+    #endif
     
     open override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         if #available(iOS 11.0, *) {
