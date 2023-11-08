@@ -84,7 +84,9 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
         // Set up base view controller behaviour
         self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         self.modalPresentationStyle = UIModalPresentationFullScreen;
+#if !TARGET_OS_VISION
         self.automaticallyAdjustsScrollViewInsets = NO;
+#endif
         self.hidesNavigationBar = true;
         
         // Controller object that handles the transition animation when presenting / dismissing this app
@@ -144,7 +146,9 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     // so we can manually control the status bar fade out timing
     if (animated) {
         self.inTransition = YES;
+#if !TARGET_OS_VISION
         [self setNeedsStatusBarAppearanceUpdate];
+#endif
     }
     
     // If this controller is pushed onto a navigation stack, set flags noting the
@@ -187,7 +191,9 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     // Now that the presentation animation will have finished, animate
     // the status bar fading out, and if present, the title label fading in
     void (^updateContentBlock)(void) = ^{
+#if !TARGET_OS_VISION
         [self setNeedsStatusBarAppearanceUpdate];
+#endif
         self.titleLabel.alpha = 1.0f;
     };
 
@@ -215,7 +221,10 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     
     // Set the transition flag again so we can defer the status bar
     self.inTransition = YES;
+    
+#if !TARGET_OS_VISION
     [UIView animateWithDuration:0.5f animations:^{ [self setNeedsStatusBarAppearanceUpdate]; }];
+#endif
     
     // Restore the navigation controller to its state before we were presented
     if (self.navigationController && self.hidesNavigationBar) {
@@ -230,7 +239,9 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     
     // Reset the state once the view has gone offscreen
     self.inTransition = NO;
+#if !TARGET_OS_VISION
     [self setNeedsStatusBarAppearanceUpdate];
+#endif
 }
 
 #pragma mark - Status Bar -
@@ -1271,6 +1282,9 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
 
 - (CGFloat)statusBarHeight
 {
+#if TARGET_OS_VISION
+    return 0.0f;
+#else
     CGFloat statusBarHeight = 0.0f;
     if (@available(iOS 11.0, *)) {
         statusBarHeight = self.view.safeAreaInsets.top;
@@ -1301,6 +1315,7 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     }
     
     return statusBarHeight;
+#endif
 }
 
 - (UIEdgeInsets)statusBarSafeInsets

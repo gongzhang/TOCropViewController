@@ -132,7 +132,11 @@ static const CGFloat kTOCropOverLayerCornerWidth = 20.0f;
     }
     
     //grid lines - horizontal
+#if TARGET_OS_VISION
+    CGFloat thickness = 1.0f / [[self traitCollection] displayScale];
+#else
     CGFloat thickness = 1.0f / [[UIScreen mainScreen] scale];
+#endif
     NSInteger numberOfLines = self.horizontalGridLines.count;
     CGFloat padding = (CGRectGetHeight(self.bounds) - (thickness*numberOfLines)) / (numberOfLines + 1);
     for (NSInteger i = 0; i < numberOfLines; i++) {
